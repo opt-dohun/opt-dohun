@@ -5,13 +5,13 @@
 ---
 
 ## 🎮 1. HexWar (분산 기반 실시간 게임 서버)
-- **GitHub 저장소:** [HexWar (HaxWar)](https://github.com/opt-dohun/HaxWar) (현재 저장소)
-- **기술 스택:** `C# / .NET Core`, `gRPC`, `WebSockets`, `Redis (SetNX, Pub/Sub)`, `Nginx`, `Docker Compose`
+- **GitHub 저장소:** [HexWar (HaxWar)](https://github.com/opt-dohun/HaxWar)
+- **기술 스택:** `C# / .NET Core`, `gRPC`, `WebSockets`, `Redis Cluster`, `Redis (SetNX, Pub/Sub)`, `Nginx`, `Docker Compose`
 
 ### 💡 기술적 고민 및 해결
-* **분산 환경 동기화 처리:** 2,000명 동시 접속 타깃의 분산 환경에서 발생하는 상태 불일치 문제를 해결하기 위해 게임 상태를 Redis에 JSON으로 영속화하[...]
-* **분산 환경 내 이벤트 브로드캐스팅:** Redis Pub/Sub의 휘발성 문제를 보완하고자 서버 로컬 메모리에 고정 크기 원형 큐를 구현하여 재접속 시 외부 DB 호출 없이 이벤트 히스토리 제공[...]
-* **힙 할당 및 GC 오버헤드 85.7% 감축:** 초당 수만 건의 패킷 처리 중 발생하는 힙 메모리 파편화를 방지하기 위해 `ArrayPool` 및 `Memory<byte>`, `ReadOnlySpan<byte[...]
+* **Redis 클러스터 기반 데이터 샤딩:** 2,000명 동시 접속 타깃 환경에서 단일 Redis 인스턴스의 메모리 병목을 해결하기 위해 Redis Cluster 도입. 게임 상태(맵 정보, 플레이어 위치, 아이템)를 해시 슬롯 기반으로 샤딩하여 수평 확장 가능한 아키텍처 구축. 2-way 레플리카로 고가용성 확보[...]
+* **분산 환경 이벤트 브로드캐스팅 및 상태 동기화:** Redis SetNX를 활용한 분산 락으로 게임 상태 ���데이트 시 동시성 제어, Redis Pub/Sub으로 실시간 이벤트 전파. 휘발성 Pub/Sub 문제를 보완하기 위해 서버 로컬 메모리에 고정 크기 원형 큐를 구현하여 재접속 시 이벤트 히스토리 제공[...]
+* **힙 할당 및 GC 오버헤드 85.7% 감축:** 초당 수만 건의 패킷 처리 중 발생하는 힙 메모리 파편화를 방지하기 위해 `ArrayPool` 및 `Memory<byte>`, `ReadOnlySpan<byte>` 활용. 객체 재사용 패턴으로 GC 압력 감소[...]
 
 ---
 
