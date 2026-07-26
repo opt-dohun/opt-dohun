@@ -15,7 +15,7 @@
 
 ---
 
-## 📊 2. HexWar Exporter (Prometheus 메트릭 수집 및 K8s 인프라 구축)
+## 📊 2. HexWar Exporter (매트릭 수집 사이트카 패턴 및 k8s 인프라 구축)
 - **GitHub 저장소:** [hexwar-exporter](https://github.com/opt-dohun/hexwar-exporter)
 - **기술 스택:** `Go 1.22`, `Prometheus`, `Kubernetes (k3d)`, `Agones`, `KEDA`, `HPA`, `Karpenter`, `Grafana`, `Loki`, `Promtail`, `LocalStack`, `OpenTelemetry`
 
