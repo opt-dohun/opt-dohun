@@ -1,6 +1,6 @@
 # opt-dohun 개인 프로젝트 포트폴리오 (Portfolio)
 
-백엔드 개발자 김도훈(opt-dohun)의 주요 백엔드 및 시스템 엔지니어링 개인 프로젝트 목록입니다. 각 프로젝트는 성능 최적화, 로우레벨 통신, 분산 환경 동기화 등 백엔드의 핵심 기술적 문제를 해결하는 데 중점을 두었습니다.
+백엔드 개발자 김도훈(opt-dohun)의 주요 백엔드 및 시스템 엔지니어링 개인 프로젝트 목록입니다. 각 프로젝트는 성능 최적화, 로우레벨 통신, 분산 환경[...]
 
 ---
 
@@ -9,20 +9,20 @@
 - **기술 스택:** `C# / .NET Core`, `gRPC`, `WebSockets`, `Redis (SetNX, Pub/Sub)`, `Nginx`, `Docker Compose`
 
 ### 💡 기술적 고민 및 해결
-* **분산 환경 동기화 처리:** 2,000명 동시 접속 타깃의 분산 환경에서 발생하는 상태 불일치 문제를 해결하기 위해 게임 상태를 Redis에 JSON으로 영속화하고, `SetNX` 분산 락으로 동시성을 제어했습니다.
-* **분산 환경 내 이벤트 브로드캐스팅:** Redis Pub/Sub의 휘발성 문제를 보완하고자 서버 로컬 메모리에 고정 크기 원형 큐를 구현하여 재접속 시 외부 DB 접근 없이 유실 패킷을 복구하도록 설계했습니다.
-* **힙 할당 및 GC 오버헤드 85.7% 감축:** 초당 수만 건의 패킷 처리 중 발생하는 힙 메모리 파편화를 방지하기 위해 `ArrayPool` 및 `Memory<byte>`, `ReadOnlySpan<byte>` 기반의 버퍼 재사용을 통한 구조를 구축했습니다. 이를 통해 시스템 중단을 유발하는 Gen 2 Full GC 발생 횟수를 7회에서 1회로 대폭 감소시켰습니다.
+* **분산 환경 동기화 처리:** 2,000명 동시 접속 타깃의 분산 환경에서 발생하는 상태 불일치 문제를 해결하기 위해 게임 상태를 Redis에 JSON으로 영속화하[...]
+* **분산 환경 내 이벤트 브로드캐스팅:** Redis Pub/Sub의 휘발성 문제를 보완하고자 서버 로컬 메모리에 고정 크기 원형 큐를 구현하여 재접속 시 외부 DB 호출 없이 이벤트 히스토리 제공[...]
+* **힙 할당 및 GC 오버헤드 85.7% 감축:** 초당 수만 건의 패킷 처리 중 발생하는 힙 메모리 파편화를 방지하기 위해 `ArrayPool` 및 `Memory<byte>`, `ReadOnlySpan<byte[...]
 
 ---
 
-## 📟 2. go-rest-example (디바이스 관리 REST API)
-- **GitHub 저장소:** [go-rest-example](https://github.com/opt-dohun/go-rest-example)
-- **기술 스택:** `Go (Golang)`, `Gin Web Framework`, `MySQL`, `Viper`, `Zap Logger`, `Docker Compose`
+## 📊 2. HexWar Exporter (Prometheus 메트릭 수집 및 K8s 인프라 구축)
+- **GitHub 저장소:** [hexwar-exporter](https://github.com/opt-dohun/hexwar-exporter)
+- **기술 스택:** `Go 1.22`, `Prometheus`, `Kubernetes (k3d)`, `Agones`, `KEDA`, `HPA`, `Karpenter`, `Grafana`, `Loki`, `Promtail`, `LocalStack`, `OpenTelemetry`
 
 ### 💡 기술적 고민 및 해결
-* **디바이스 정보 관리:** 디바이스의 제품 번호, Mac 주소, 펌웨어 버전 정보 및 실시간 연결 상태(`LastSeenAt`, `Status`)를 효과적으로 관리하기 위해 고성능 인덱싱 전략(복합 인덱스 및 헬스 체크 인덱스)을 MySQL에 적용했습니다.
-* **연결 상태 관리:** 서버 종료 시 진행 중인 요청의 누락을 방지하기 위해 Go의 `signal.NotifyContext`를 활용해 시스템 시그널(`SIGINT`, `SIGTERM`) 발생 시 안전하게 연결을 닫는 흐름을 구축했습니다.
-* **환경 변수 격리:** `Viper`와 `godotenv`를 통한 환경 변수 관리 및 `Zap` 구조화 로거(Structured Logger)를 도입해 운영 환경에 따른 로그 레벨 격리와 빠른 디버깅 환경을 지원합니다.
+* **메트릭 수집 사이드카 패턴:** C#/.NET 기반 게임 서버에 관측성 라이브러리 추가로 인한 복잡도 증가를 방지하기 위해 Go 기반 독립 사이드카로 메트릭 수집을 분리. Prometheus 스크랩당 **0.017ms 처리 속도**와 **56KB 메모리 할당**으로 오버헤드 최소화. 서킷 브레이커 패턴으로 게임 서버 장애 시 메트릭 수집 지연으로 인한 상위 시스템 영향 차단[...]
+* **K8s 게임 서버 오토스케일링:** LocalStack과 k3d를 연동하여 AWS EC2 Auto Scaling Group API를 모킹하고, Karpenter와 KEDA 연동으로 **Prometheus 메트릭 기반 이벤트 오토스케일링** 구축. 스케일 다운 시 Pod 내부의 활성 게임 세션을 counter로 추적하여 진행 중인 게임이 중단되지 않도록 graceful shutdown 관리[...]
+* **통합 로그 수집 파이프라인:** Promtail 데몬셋을 각 노드에 배포하여 쿠버네티스 전체 로그 수집, Loki로 중앙 집중식 저장 및 관리, Grafana와 연동하여 Prometheus 메트릭과 Loki 로그를 통합 모니터링 대시보드 구축[...]
 
 ---
 
@@ -31,5 +31,6 @@
 - **기술 스택:** `C# / .NET`, `System.Net.Sockets`, `Async/Await Task`
 
 ### 💡 기술적 고민 및 해결
-* **TCP 패킷 단편화 및 병합 대응:** 경계가 없는 TCP 스트림 환경에서 패킷 유실 및 병합 오류를 방지하기 위해 헤더에 페이로드 크기를 명시하는 고유의 **메시지 프로토콜(MessageProtocol)**을 정의하여 수신 버퍼에서 데이터를 정확히 슬라이싱했습니다.
-* **비동기 기반 통신:** 다중 클라이언트 접속 시 스레드 풀의 고갈을 막기 위해 C#의 비동기 소켓 통신 API를 적용하여 비동기 논블로킹 방식으로 클라이언트의 메시지 브로드캐스트와 연결 상태를 관리합니다.
+* **TCP 패킷 단편화 및 병합 대응:** 경계가 없는 TCP 스트림 환경에서 패킷 유실 및 병합 오류를 방지하기 위해 헤더에 페이로드 크기를 명시하는 고유의[...]
+* **비동기 기반 통신:** 다중 클라이언트 접속 시 스레드 풀의 고갈을 막기 위해 C#의 비동기 소켓 통신 API를 적용하여 비동기 논블로킹 방식으로 클라[...]
+
