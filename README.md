@@ -1,38 +1,7 @@
 # 김도훈 · 서버 백엔드 개발자
-
-Go · C# · TypeScript로 백엔드를 만들고, GCP와 Kubernetes 위에서 운영합니다.
-**성능은 추측하지 않고 측정합니다** — 부하 테스트로 병목을 찾아 수치로 검증하는 것을 좋아하고, 그 과정과 한계까지 함께 기록합니다.
-
-📧 rlaehgns0714@gmail.com ｜ 🔗 [github.com/opt-dohun](https://github.com/opt-dohun)
-📄 이력서·포트폴리오는 메일로 요청해 주세요.
-
 ---
 
-## 📈 핵심 성과
-
-| 맥락 | 과제 | 결과 |
-| --- | --- | --- |
-| HaxWar (게임 서버) | GC·힙 파편화로 인한 프리징 | Gen2 GC **7회 → 1회**, GC 힙 **232 → 98MB**, 세션당 **116 → 50KB** |
-| HaxWar (인프라) | 분산 노드 간 세션 상태 불일치 | Redis Pub/Sub 브로드캐스트 + 원형 큐 재처리로 상태 불일치 해소 |
-| HaxWar (인프라) | 로그 폭증 | Vector → Kafka → Quickwit 파이프라인, **약 1,020만 건 2.8GB → 577MB** |
-| 붉은 파도 (게임 서버) | 락 전략 검증 | WAL 전환으로 임계 구역 p95 **13.67 → 0.23ms**, 처리량 **10.6 → 510.9 전투/초** |
-| 보이저 게임즈 (실무) | 라이브 랭킹 이벤트 부하 | 응답 지연 **180ms → 5ms**, 상용 Spanner 노드 CPU **90% → 50%** |
-| 비엔씨테크 (실무) | IoT 펌웨어 업데이트 실패 | 실패율 **60% → 10% 이하** |
-
-## 🧰 기술 스택
-
-| 구분 | 내용 |
-| --- | --- |
-| 언어 | `Go` `C#` `Python` `TypeScript` |
-| 서버 | `gRPC` `WebSocket` `HTTP/REST` `Node.js(Express, Next.js)` |
-| 데이터베이스 | `Google Cloud Spanner` `MySQL` `MariaDB` `PostgreSQL` `SQLite` `Redis` |
-| 클라우드 · 인프라 | `Cloud Run` `Cloud Pub/Sub` `BigQuery` `Cloud Scheduler` `Kubernetes(k3d)` `Agones` `KEDA` `Kafka` `Docker` |
-| 관측 · 성능 | `Prometheus` `Grafana` `Loki` `OpenTelemetry` `k6` |
-| 협업 | `GitHub Actions` `OpenAPI` |
-
----
-
-## 🚀 대표 프로젝트
+## 개인 프로젝트 내용
 
 ### 🎮 1. HaxWar — 분산 기반 실시간 멀티플레이어 게임 서버
 `C# / .NET 8` · `WebSocket` · `gRPC` · `Redis` · `Nginx` · 2026.05 – 2026.08 · 1인 프로젝트
